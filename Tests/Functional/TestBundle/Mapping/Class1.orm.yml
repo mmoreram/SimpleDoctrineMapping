@@ -1,0 +1,13 @@
+Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\Class1:
+    type: entity
+    table: class1
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            column: code
+            type: string
+            length: 255

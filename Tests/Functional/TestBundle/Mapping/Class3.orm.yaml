@@ -1,0 +1,13 @@
+Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\MyOtherEntityNamespace\Class3:
+    type: entity
+    table: class3
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        phone:
+            column: phone
+            type: string
+            length: 255
