@@ -3,26 +3,32 @@ Simple Doctrine Mapping for Symfony2
 
 *KISS*, Remember?
 
-Este bundle agiliza y reduce la complejidad del automapping de Doctrine. La
-primera premisa para utilizar este bundle es desactivar, si está activado, el
-`auto_mapping` de los managers de doctrine. Una vez desactivados, manos a la
-obra, vamos a definir cada una de nuestra entidades como se mapea con el ORM.
+This bundle streamlines and reduces the complexity of the Doctrine mapping process. the
+first premise to use this bundle is disable, if enabled, the
+`auto_mapping` config definition of your managers. Once active, hands-on
+work, we will define specificly how your entities map to your ORM.
 
-El bundle ofrece única y exclusivamente un CompilerPass abstracto, para que
-cada proyecto pueda extenderlo y utilizar un único método. Repito,
-*Keep it simple*, muy importante.
+SimpleDoctrineMapping offers you just an abstract compiler pass with one method,
+enough to make your project work.
+
+Repeat with me, *Keep it simple*
 
 CompilerPass
 ------------
 
-Un CompilerPass, para la gente que no conozca lo que es, no es otra cosa que una
-clase inyectada al Container y ejecutada justo antes de ser compilado. Digamos
-que es la última oportunidad de hacer cambios en el mapa de Inyección de
-Dependencias antes que este se construya y pase a ser de solo lectura.
+A CompilerPass, to those of you who still do not know what are they, try to see
+them as your last chance to configure your container. At this point you can
+retrieve all your parameter configuration, but you cannot build any service, you
+is the point where you can dinamically build and complete services.
 
-Este bundle propone una forma bastante sencilla de definir como se mapean las
-entidades de tu bundle, dejando al propio bundle la capacidad para definir
-las localizaciones de los mismos y el EntityManager al que irá asociado.
+Once compiled, this container will be read-only.
+
+This CompilerPass let each bundle be responsable for itw own entities, defining
+per each one, the class to be mapped, the path of the mapping file and the
+manager that will manage it.
+
+You should create your own compiler pass
+
 
 ``` php
 <?php
@@ -63,14 +69,49 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
 }
 ```
 
-And that's it. Con esto estamos añadiendo a nuestro mapa de Doctrine nuestra
-entidad sin ningún tipo de magia oscura y de forma completamente explícita.
+and pass it to your bundle. Like this.
+
+``` php
+    <?php
+
+    /**
+     * SimpleDoctrineMapping for Symfony2
+     */
+
+    namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle;
+
+    use Symfony\Component\DependencyInjection\ContainerBuilder;
+    use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+    use Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\CompilerPass\MappingCompilerPass;
+
+    /**
+     * Class TestBundle
+     */
+    class TestBundle extends Bundle
+    {
+        /**
+         * @param ContainerBuilder $container
+         */
+        public function build(ContainerBuilder $container)
+        {
+            parent::build($container);
+
+            $container->addCompilerPass(new MappingCompilerPass());
+        }
+    }
+```
+
+And that's it. After the container compilation we will add our mapping
+information. No magic.
+
 
 addEntityMapping()
 ------------------
 
-El método *addEntityMapping()* nos ofrece pocas opciones, pero las necesarias
-para poder definir el mapa de entidades en la gran mayoría de los casos.
+The method *addEntityMapping()* offers us not much options, but the necessary
+to be able to define the entity map of most cases.
+
 
 ``` php
     /**
@@ -119,16 +160,20 @@ para poder definir el mapa de entidades en la gran mayoría de los casos.
     )
 ```
 
-Todos los valores son obligatorios.
+Of course, all values are required.
 
 Parameters
 ----------
 
-Imaginemos ahora que nuestro bundle se instala como Vendor. Evidentemente no
-podemos asegurar que nuestras entidades van a ser representadas por una
-clase y un fichero de mapping específico ya que en este caso, perderíamos toda
-opción de hacer overriding. Por esta razón este bundle permite trabajar con
-parámetros de container de forma completamente transparente.
+So, imagine that you are working in a public Bundle, I mean, your bundle will be
+installed by other projects in their vendor folder, but you want to expose your
+own entity model.
+
+You could think that using this bundle you force the final user to use your
+model implementation in all cases, but is not.
+
+If you want to give this power to your users, if you want to expose overridable
+entities, you can define your model using container parameters.
 
 ``` yml
 parameters:
@@ -141,11 +186,11 @@ parameters:
     test_bundle.entity.user.entity_manager: default
 ```
 
-En este caso, nuestro bundle pondrá a merced del proyecto el poder sobreescribir
-la configuración por defecto.
+In that case your bundle will put at the mercy of the users the ability to
+override all the required parameters just overriding specific configuration
+items.
 
-Finalmente podemos definir el mapping de nuestra entidad utilizando simplemente
-los parámetros.
+You must finally create these params with your default values.
 
 ``` php
 <?php
@@ -185,9 +230,6 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
     }
 }
 ```
-
-Ahora, cualquier proyecto que desee sobrecargar cualquiera de estos datos solo
-deberá sobreescribir el valor de tales parámetros.
 
 Tags
 ----
