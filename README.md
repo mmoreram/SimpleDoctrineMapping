@@ -69,7 +69,7 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
 }
 ```
 
-and pass it to your bundle. Like this.
+and add it into the Container. Like this.
 
 ``` php
     <?php
