@@ -192,14 +192,6 @@ class MappingDriverChain implements MappingDriver
      */
     protected function classNameIsAllowed($className, $namespace)
     {
-        if (strpos($className, $namespace) === 0) {
-            $count = 1;
-            $entityName = trim(str_replace($namespace, '', $className, $count), '\\');
-            if (false === strpos($entityName, '\\')) {
-                return true;
-            }
-        }
-
-        return false;
+        return $className === $namespace;
     }
 }
