@@ -49,7 +49,7 @@ class LocatorConfigurator
     {
         $path = $locator->getPaths()[0];
 
-        $resourcePathExploded = explode(DIRECTORY_SEPARATOR, $path);
+        $resourcePathExploded = explode('/', $path);
         $resourcePathRoot = array_shift($resourcePathExploded);
 
         if (strpos($resourcePathRoot, '@') == 0) {
@@ -65,7 +65,7 @@ class LocatorConfigurator
 
         array_unshift($resourcePathExploded, $resourcePathRoot);
 
-        $path = implode(DIRECTORY_SEPARATOR, $resourcePathExploded);
+        $path = implode('/', $resourcePathExploded);
         $locator->setPaths([$path]);
     }
 }
