@@ -6,7 +6,7 @@ Simple Doctrine Mapping for Symfony2
 This bundle streamlines and reduces the complexity of the Doctrine mapping process. the
 first premise to use this bundle is disable, if enabled, the
 `auto_mapping` config definition of your managers. Once active, hands-on
-work, we will define specificly how your entities map to your ORM.
+work, we will define specifically how your entities map to your ORM.
 
 SimpleDoctrineMapping offers you just an abstract compiler pass with one method,
 enough to make your project work.
@@ -16,14 +16,14 @@ Repeat with me, *Keep it simple*
 CompilerPass
 ------------
 
-A CompilerPass, to those of you who still do not know what are they, try to see
+A CompilerPass, to those of you who still do not know what they are, try to see
 them as your last chance to configure your container. At this point you can
-retrieve all your parameter configuration, but you cannot build any service, you
+retrieve all your parameter configuration, but you cannot build any service, it
 is the point where you can dinamically build and complete services.
 
 Once compiled, this container will be read-only.
 
-This CompilerPass let each bundle be responsable for itw own entities, defining
+This CompilerPass lets each bundle be responsable for its own entities, defining
 per each one, the class to be mapped, the path of the mapping file and the
 manager that will manage it.
 
@@ -69,7 +69,7 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
 }
 ```
 
-and add it into the Container. Like this.
+and add it into the Container. Like this:
 
 ``` php
     <?php
@@ -95,22 +95,20 @@ and add it into the Container. Like this.
          */
         public function build(ContainerBuilder $container)
         {
-            parent::build($container);
-
             $container->addCompilerPass(new MappingCompilerPass());
         }
     }
 ```
 
-And that's it. After the container compilation we will add our mapping
+And that's it. After the container compilation it will add our mapping
 information. No magic.
 
 
 addEntityMapping()
 ------------------
 
-The method *addEntityMapping()* offers us not much options, but the necessary
-to be able to define the entity map of most cases.
+The method *addEntityMapping()* does not offer us many options, but the necessary
+to be able to define the entity map in most cases.
 
 
 ``` php
@@ -129,7 +127,7 @@ to be able to define the entity map of most cases.
      *
      * $entityNamespace must be an existing namespace of Entity. This value also
      * can be a valid and existing container parameter, with an existing
-     * namespace of Entity as value.
+     * namespace of an Entity as value.
      *
      * p.e. MyBundle\Entity\User
      * p.e. mybundle.entity.user.class
@@ -137,7 +135,7 @@ to be able to define the entity map of most cases.
      * $mappingFilePath must be a path of an existing yml or xml file, with
      * mapping information about $entityNamespace. This bundle uses Short Bundle
      * notation, with "@" symbol. This value also can be a valid and existing
-     * container parameter, with a path of an existing yml or xml file as value.
+     * container parameter, with a path to an existing yml or xml file as value.
      *
      * p.e. @MyBundle/Resources/config/doctrine/User.orm.yml
      * p.e. @MyBundle/Resources/config/doctrine/User.orm.xml
@@ -169,7 +167,7 @@ So, imagine that you are working in a public Bundle, I mean, your bundle will be
 installed by other projects in their vendor folder, but you want to expose your
 own entity model.
 
-You could think that using this bundle you force the final user to use your
+You could think that by using this bundle you force the final user to use your
 model implementation in all cases, but is not.
 
 If you want to give this power to your users, if you want to expose overridable
@@ -186,8 +184,8 @@ parameters:
     test_bundle.entity.user.entity_manager: default
 ```
 
-In that case your bundle will put at the mercy of the users the ability to
-override all the required parameters just overriding specific configuration
+In that case your bundle will put at users mercy the ability to
+override all the required parameters by just overriding specific configuration
 items.
 
 You must finally create these params with your default values.
