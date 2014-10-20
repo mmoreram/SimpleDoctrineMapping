@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,10 +14,11 @@
 namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\app;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\TestBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
+
+use Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\TestBundle;
 
 /**
  * Class AppKernel

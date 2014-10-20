@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,9 +13,10 @@
 
 namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle;
 
-use Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\CompilerPass\MappingCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+use Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\CompilerPass\MappingCompilerPass;
 
 /**
  * Class TestBundle

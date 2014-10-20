@@ -18,12 +18,12 @@ CompilerPass
 
 A CompilerPass, to those of you who still do not know what they are, try to see
 them as your last chance to configure your container. At this point you can
-retrieve all your parameter configuration, but you cannot build any service, it
-is the point where you can dinamically build and complete services.
+retrieve all your parameter configuration, but you cannot build any service, you
+is the point where you can dynamically build and complete services.
 
 Once compiled, this container will be read-only.
 
-This CompilerPass lets each bundle be responsable for its own entities, defining
+This CompilerPass let each bundle be responsible for itw own entities, defining
 per each one, the class to be mapped, the path of the mapping file and the
 manager that will manage it.
 
@@ -62,7 +62,8 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
                 $container,
                 'default',
                 'TestBundle\Entity\User',
-                '@TestBundle/Mapping/User.orm.yml'
+                '@TestBundle/Mapping/User.orm.yml',
+                true
             )
         ;
     }
@@ -132,7 +133,7 @@ to be able to define the entity map in most cases.
      * p.e. MyBundle\Entity\User
      * p.e. mybundle.entity.user.class
      *
-     * $mappingFilePath must be a path of an existing yml or xml file, with
+     * $entityMappingFilePath must be a path of an existing yml or xml file with
      * mapping information about $entityNamespace. This bundle uses Short Bundle
      * notation, with "@" symbol. This value also can be a valid and existing
      * container parameter, with a path to an existing yml or xml file as value.
@@ -141,10 +142,16 @@ to be able to define the entity map in most cases.
      * p.e. @MyBundle/Resources/config/doctrine/User.orm.xml
      * p.e. mybundle.entity.user.mapping_file_path
      *
+     * Finally, $enable flag just allow you to add current mapping definition
+     * into all Doctrine Map table, or just dismiss it. This is useful when you
+     * want to give possibility to final user to enable or disable a mapping
+     * class.
+     *
      * @param ContainerBuilder $container             Container
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
+     * @param boolean          $enable                Entity mapping must be included
      *
      * @return $this self Object
      *
@@ -154,11 +161,12 @@ to be able to define the entity map in most cases.
         ContainerBuilder $container,
         $entityManagerName,
         $entityNamespace,
-        $entityMappingFilePath
+        $entityMappingFilePath,
+        $enable = true
     )
 ```
 
-Of course, all values are required.
+Of course, all values are required but the last one.
 
 Parameters
 ----------
@@ -177,11 +185,12 @@ entities, you can define your model using container parameters.
 parameters:
 
     #
-    # Classes
+    # Mapping information
     #
     test_bundle.entity.user.class: "TestBundle\Entity\User"
     test_bundle.entity.user.mapping_file_path: "@TestBundle/Mapping/Class.orm.yml"
     test_bundle.entity.user.entity_manager: default
+    test_bundle.entity.user.enable: true
 ```
 
 In that case your bundle will put at users mercy the ability to
@@ -222,7 +231,8 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
                 $container,
                 'test_bundle.entity.user.entity_manager',
                 'test_bundle.entity.user.class',
-                'test_bundle.entity.user.mapping_file_path'
+                'test_bundle.entity.user.mapping_file_path',
+                'test_bundle.entity.user.enable'
             )
         ;
     }
@@ -238,7 +248,7 @@ Tags
 Contributing
 ------------
 
-This projects follows Symfony2 coding standards, so pull requests must pass phpcs
+This projects follows Symfony2 coding standards, so pull requests must pass PHPCS
 checks. Read more details about
 [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
 and install the corresponding [CodeSniffer definition](https://github.com/opensky/Symfony2-coding-standard)

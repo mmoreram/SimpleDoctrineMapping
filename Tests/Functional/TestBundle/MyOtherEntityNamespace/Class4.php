@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE

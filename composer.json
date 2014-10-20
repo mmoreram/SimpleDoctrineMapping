@@ -24,10 +24,7 @@
     },
     "require-dev": {
         "symfony/framework-bundle": "~2.4, >=2.4.8",
-        "doctrine/doctrine-bundle": "~1.2",
-        "phpunit/phpunit": ">=3.7",
-        "mmoreram/php-formatter": "~1.0"
-
+        "doctrine/doctrine-bundle": "~1.2"
     },
     "autoload": {
         "psr-4": {

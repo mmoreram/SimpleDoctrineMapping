@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,9 +13,10 @@
 
 namespace Mmoreram\SimpleDoctrineMapping\Configurator;
 
-use Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+
+use Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator;
 
 /**
  * Class LocatorConfigurator
