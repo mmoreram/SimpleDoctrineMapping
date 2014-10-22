@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,13 +13,14 @@
 
 namespace Mmoreram\SimpleDoctrineMapping\CompilerPass\Abstracts;
 
-use Mmoreram\SimpleDoctrineMapping\DataObject\EntityMapping;
-use Mmoreram\SimpleDoctrineMapping\Exception\EntityManagerNotFound;
-use Mmoreram\SimpleDoctrineMapping\Exception\MappingExtensionWithoutDriver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+
+use Mmoreram\SimpleDoctrineMapping\DataObject\EntityMapping;
+use Mmoreram\SimpleDoctrineMapping\Exception\EntityManagerNotFound;
+use Mmoreram\SimpleDoctrineMapping\Exception\MappingExtensionWithoutDriver;
 
 /**
  * Class MappingCompilerPass
@@ -46,7 +47,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * p.e. MyBundle\Entity\User
      * p.e. mybundle.entity.user.class
      *
-     * $mappingFilePath must be a path of an existing yml or xml file, with
+     * $entityMappingFilePath must be a path of an existing yml or xml file with
      * mapping information about $entityNamespace. This bundle uses Short Bundle
      * notation, with "@" symbol. This value also can be a valid and existing
      * container parameter, with a path of an existing yml or xml file as value.
@@ -55,10 +56,16 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * p.e. @MyBundle/Resources/config/doctrine/User.orm.xml
      * p.e. mybundle.entity.user.mapping_file_path
      *
+     * Finally, $enable flag just allow you to add current mapping definition
+     * into all Doctrine Map table, or just dismiss it. This is useful when you
+     * want to give possibility to final user to enable or disable a mapping
+     * class.
+     *
      * @param ContainerBuilder $container             Container
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
+     * @param boolean          $enable                Entity mapping must be included
      *
      * @return $this self Object
      *
@@ -68,21 +75,26 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         ContainerBuilder $container,
         $entityManagerName,
         $entityNamespace,
-        $entityMappingFilePath
+        $entityMappingFilePath,
+        $enable = true
     )
     {
         $entityMapping = $this->resolveEntityMapping(
             $container,
             $entityManagerName,
             $entityNamespace,
-            $entityMappingFilePath
+            $entityMappingFilePath,
+            $enable
         );
 
-        $this
-            ->registerLocatorConfigurator($container)
-            ->registerLocator($container, $entityMapping)
-            ->registerDriver($container, $entityMapping)
-            ->addDriverInDriverChain($container, $entityMapping);
+        if ($entityMapping instanceof EntityMapping) {
+
+            $this
+                ->registerLocatorConfigurator($container)
+                ->registerLocator($container, $entityMapping)
+                ->registerDriver($container, $entityMapping)
+                ->addDriverInDriverChain($container, $entityMapping);
+        }
 
         return $this;
     }
@@ -94,18 +106,31 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
+     * @param boolean          $enable                Entity mapping must be included
      *
-     * @return AbstractMappingCompilerPass self Object
+     * @return EntityMapping|null New EntityMapping object or null if current
+     *                            entity has not to be included
      *
-     * @throws EntityManagerNotFound Entity Manager nod found
+     * @throws EntityManagerNotFound Entity Manager not found
      */
     protected function resolveEntityMapping(
         ContainerBuilder $container,
         $entityManagerName,
         $entityNamespace,
-        $entityMappingFilePath
+        $entityMappingFilePath,
+        $enable = true
     )
     {
+        $enableEntityMapping = $this->resolveParameterName(
+            $container,
+            $enable
+        );
+
+        if (false === $enableEntityMapping) {
+
+            return null;
+        }
+
         $entityNamespace = $this->resolveParameterName($container, $entityNamespace);
         $entityMappingFilePath = $this->resolveParameterName($container, $entityMappingFilePath);
         $entityManagerName = $this->resolveParameterName($container, $entityManagerName);

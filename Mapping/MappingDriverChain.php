@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * SimpleDoctrineMapping for Symfony2
  *
  * For the full copyright and license information, please view the LICENSE
@@ -139,7 +139,7 @@ class MappingDriverChain implements MappingDriver
                 $driverClasses[$oid] = $driver->getAllClassNames();
             }
 
-            foreach ($driverClasses[$oid] AS $className) {
+            foreach ($driverClasses[$oid] as $className) {
                 if ($this->classNameIsAllowed($className, $namespace)) {
                     $classNames[$className] = true;
                 }
