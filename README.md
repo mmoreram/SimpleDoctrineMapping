@@ -23,7 +23,7 @@ is the point where you can dynamically build and complete services.
 
 Once compiled, this container will be read-only.
 
-This CompilerPass let each bundle be responsible for itw own entities, defining
+This CompilerPass let each bundle be responsible for its own entities, defining
 per each one, the class to be mapped, the path of the mapping file and the
 manager that will manage it.
 
