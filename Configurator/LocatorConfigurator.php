@@ -53,7 +53,7 @@ class LocatorConfigurator
         $resourcePathExploded = explode('/', $path);
         $resourcePathRoot = array_shift($resourcePathExploded);
 
-        if (strpos($resourcePathRoot, '@') == 0) {
+        if (strpos($resourcePathRoot, '@') === 0) {
 
             $mappingFileBundle = ltrim($resourcePathRoot, '@');
             $bundle = $this->kernel->getBundle($mappingFileBundle);
