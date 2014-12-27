@@ -61,12 +61,17 @@ class MappingDriverChain implements MappingDriver
      * Adds a nested driver.
      *
      * @param MappingDriver $nestedDriver
+     * @param string|null   $namespace
      *
      * @return void
      */
-    public function addDriver(MappingDriver $nestedDriver)
+    public function addDriver(MappingDriver $nestedDriver, $namespace = null)
     {
-        $this->drivers[] = $nestedDriver;
+        if (null === $namespace) {
+            $this->drivers[] = $nestedDriver;
+        } else {
+            $this->drivers[$namespace] = $nestedDriver;
+        }
     }
 
     /**
