@@ -18,7 +18,7 @@ CompilerPass
 
 A CompilerPass, to those of you who still do not know what they are, try to see
 them as your last chance to configure your container. At this point you can
-retrieve all your parameter configuration, but you cannot build any service, you
+retrieve all your parameter configuration, but you cannot build any service, this
 is the point where you can dynamically build and complete services.
 
 Once compiled, this container will be read-only.
@@ -155,7 +155,7 @@ to be able to define the entity map in most cases.
      *
      * @return $this self Object
      *
-     * @throws EntityManagerNotFound Entity Manager nod found
+     * @throws EntityManagerNotFound Entity Manager not found
      */
     protected function addEntityMapping(
         ContainerBuilder $container,
