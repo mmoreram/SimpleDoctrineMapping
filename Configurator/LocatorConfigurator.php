@@ -16,6 +16,7 @@ namespace Mmoreram\SimpleDoctrineMapping\Configurator;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use Mmoreram\SimpleDoctrineMapping\Exception\ConfigurationInvalidException;
 use Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator;
 
 /**
@@ -45,6 +46,8 @@ class LocatorConfigurator
      * with the value of such parameter.
      *
      * @param SimpleDoctrineMappingLocator $locator Locator
+     *
+     * @throws ConfigurationInvalidException Configuration invalid
      */
     public function configure(SimpleDoctrineMappingLocator $locator)
     {
@@ -67,6 +70,12 @@ class LocatorConfigurator
         array_unshift($resourcePathExploded, $resourcePathRoot);
 
         $path = implode('/', $resourcePathExploded);
+
+        if (!file_exists($path)) {
+
+            throw new ConfigurationInvalidException('Mapping file "' . $path . '" does not exist');
+        }
+
         $locator->setPaths([$path]);
     }
 }
