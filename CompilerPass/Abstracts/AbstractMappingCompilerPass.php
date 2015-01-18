@@ -19,8 +19,9 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 use Mmoreram\SimpleDoctrineMapping\DataObject\EntityMapping;
-use Mmoreram\SimpleDoctrineMapping\Exception\EntityManagerNotFound;
-use Mmoreram\SimpleDoctrineMapping\Exception\MappingExtensionWithoutDriver;
+use Mmoreram\SimpleDoctrineMapping\Exception\ConfigurationInvalidException;
+use Mmoreram\SimpleDoctrineMapping\Exception\EntityManagerNotFoundException;
+use Mmoreram\SimpleDoctrineMapping\Exception\MappingExtensionWithoutDriverException;
 
 /**
  * Class MappingCompilerPass
@@ -69,7 +70,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      *
      * @return $this self Object
      *
-     * @throws EntityManagerNotFound Entity Manager nod found
+     * @throws EntityManagerNotFoundException Entity Manager nod found
      */
     protected function addEntityMapping(
         ContainerBuilder $container,
@@ -111,7 +112,8 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * @return EntityMapping|null New EntityMapping object or null if current
      *                            entity has not to be included
      *
-     * @throws EntityManagerNotFound Entity Manager not found
+     * @throws ConfigurationInvalidException  Configuration invalid
+     * @throws EntityManagerNotFoundException Entity Manager not found
      */
     protected function resolveEntityMapping(
         ContainerBuilder $container,
@@ -127,11 +129,16 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         );
 
         if (false === $enableEntityMapping) {
-
             return null;
         }
 
         $entityNamespace = $this->resolveParameterName($container, $entityNamespace);
+
+        if (!class_exists($entityNamespace)) {
+
+            throw new ConfigurationInvalidException('Entity ' . $entityNamespace . ' not found');
+        }
+
         $entityMappingFilePath = $this->resolveParameterName($container, $entityMappingFilePath);
         $entityManagerName = $this->resolveParameterName($container, $entityManagerName);
         $this->resolveEntityManagerName($container, $entityManagerName);
@@ -237,7 +244,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      *
      * @return AbstractMappingCompilerPass self Object
      *
-     * @throws EntityManagerNotFound Entity Manager nod found
+     * @throws EntityManagerNotFoundException Entity Manager nod found
      */
     protected function addDriverInDriverChain(
         ContainerBuilder $container,
@@ -292,13 +299,13 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      *
      * @return string Parameter value
      *
-     * @throws EntityManagerNotFound Entity manager not found
+     * @throws EntityManagerNotFoundException Entity manager not found
      */
     protected function resolveEntityManagerName(ContainerBuilder $container, $entityManagerName)
     {
         if (!$container->has('doctrine.orm.' . $entityManagerName . '_metadata_driver')) {
 
-            throw new EntityManagerNotFound($entityManagerName);
+            throw new EntityManagerNotFoundException($entityManagerName);
         }
 
         return $this;
@@ -311,7 +318,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      *
      * @return string Driver namespace
      *
-     * @throws MappingExtensionWithoutDriver Driver not found
+     * @throws MappingExtensionWithoutDriverException Driver not found
      */
     public function getDriverNamespaceGivenEntityMapping(EntityMapping $entityMapping)
     {
@@ -328,7 +335,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
                 $namespace .= 'XmlDriver';
                 break;
             default:
-                throw new MappingExtensionWithoutDriver($entityMapping->getExtension());
+                throw new MappingExtensionWithoutDriverException($entityMapping->getExtension());
         }
 
         return $namespace;

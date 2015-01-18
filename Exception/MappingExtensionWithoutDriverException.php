@@ -16,9 +16,9 @@ namespace Mmoreram\SimpleDoctrineMapping\Exception;
 use Exception;
 
 /**
- * Class MappingExtensionWithoutDriver
+ * Class MappingExtensionWithoutDriverException
  */
-class MappingExtensionWithoutDriver extends Exception
+class MappingExtensionWithoutDriverException extends Exception
 {
     /**
      * Exception constructor

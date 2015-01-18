@@ -16,17 +16,9 @@ namespace Mmoreram\SimpleDoctrineMapping\Exception;
 use Exception;
 
 /**
- * Class EntityManagerNotFound
+ * Class ConfigurationInvalidException
  */
-class EntityManagerNotFound extends Exception
+class ConfigurationInvalidException extends Exception
 {
-    /**
-     * Exception constructor
-     *
-     * @param string $entityManagerName EntityManager name
-     */
-    public function __construct($entityManagerName)
-    {
-        parent::__construct('Entity manager "' . $entityManagerName . '" not found.');
-    }
+
 }
