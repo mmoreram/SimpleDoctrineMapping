@@ -195,7 +195,8 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         $locator = new Definition('Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator');
         $locator->setPublic(false);
         $locator->setArguments(array(
-            [$entityMapping->getEntityMappingFilePath()]
+            $entityMapping->getEntityNamespace(),
+            [$entityMapping->getEntityMappingFilePath()],
         ));
         $locator->setConfigurator([
             new Reference('simple_doctrine_mapping.locator_configurator'),
@@ -265,6 +266,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
             new Reference(
                 'doctrine.orm.' . $entityMapping->getUniqueIdentifier() . '_metadata_driver'
             ),
+            $entityMapping->getEntityNamespace(),
         ));
 
         return $this;
