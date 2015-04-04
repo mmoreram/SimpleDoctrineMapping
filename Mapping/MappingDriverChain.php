@@ -16,12 +16,13 @@ namespace Mmoreram\SimpleDoctrineMapping\Mapping;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain as BaseMappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
 /**
  * Class MappingDriverChain
  */
-class MappingDriverChain implements MappingDriver
+class MappingDriverChain extends BaseMappingDriverChain
 {
     /**
      * The default driver.

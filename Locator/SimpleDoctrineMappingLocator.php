@@ -22,6 +22,20 @@ use Doctrine\ORM\Mapping\MappingException;
 class SimpleDoctrineMappingLocator extends DefaultFileLocator
 {
     /**
+     * Entity namespace
+     *
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * Array with mapping file path
+     *
+     * @var array
+     */
+    protected static $pathsMap = array();
+
+    /**
      * Set paths
      *
      * @param array $paths Paths
@@ -31,6 +45,7 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
     public function setPaths($paths)
     {
         $this->paths = $paths;
+        self::$pathsMap[$this->namespace] = $this->paths;
 
         return $this;
     }
@@ -38,10 +53,12 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
     /**
      * Constructor.
      *
-     * @param array $prefixes
+     * @param string $namespace
+     * @param array  $prefixes
      */
-    public function __construct(array $prefixes)
+    public function __construct($namespace, array $prefixes)
     {
+        $this->namespace = $namespace;
         $this->paths = $prefixes;
     }
 
@@ -69,6 +86,10 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
         if (!$this->fileExists($className)) {
 
             throw MappingException::mappingFileNotFound($className, $this->paths[0]);
+        }
+
+        if (isset(self::$pathsMap[$className])) {
+            $this->paths = self::$pathsMap[$className];
         }
 
         return $this->paths[0];
