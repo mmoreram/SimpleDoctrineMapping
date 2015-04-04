@@ -66,7 +66,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
-     * @param boolean          $enable                Entity mapping must be included
+     * @param boolean|string   $enable                Entity mapping must be included
      *
      * @return $this self Object
      *
@@ -107,7 +107,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
-     * @param boolean          $enable                Entity mapping must be included
+     * @param boolean|string   $enable                Entity mapping must be included
      *
      * @return EntityMapping|null New EntityMapping object or null if current
      *                            entity has not to be included
