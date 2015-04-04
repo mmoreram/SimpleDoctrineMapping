@@ -64,7 +64,6 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
                 'Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\NonExisting',
                 '@TestBundle/Mapping/NonExisting.orm.yml',
                 false
-            )
-        ;
+            );
     }
 }

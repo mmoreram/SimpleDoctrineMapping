@@ -62,8 +62,7 @@ class EntityMapping
         $entityNamespace,
         $entityMappingFilePath,
         $entityManagerName
-    )
-    {
+    ) {
         $this->entityNamespace = $entityNamespace;
         $this->entityMappingFilePath = $entityMappingFilePath;
         $this->entityManagerName = $entityManagerName;

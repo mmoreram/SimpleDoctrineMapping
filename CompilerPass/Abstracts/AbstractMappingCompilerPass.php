@@ -78,8 +78,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         $entityNamespace,
         $entityMappingFilePath,
         $enable = true
-    )
-    {
+    ) {
         $entityMapping = $this->resolveEntityMapping(
             $container,
             $entityManagerName,
@@ -89,7 +88,6 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         );
 
         if ($entityMapping instanceof EntityMapping) {
-
             $this
                 ->registerLocatorConfigurator($container)
                 ->registerLocator($container, $entityMapping)
@@ -121,21 +119,19 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         $entityNamespace,
         $entityMappingFilePath,
         $enable = true
-    )
-    {
+    ) {
         $enableEntityMapping = $this->resolveParameterName(
             $container,
             $enable
         );
 
         if (false === $enableEntityMapping) {
-            return null;
+            return;
         }
 
         $entityNamespace = $this->resolveParameterName($container, $entityNamespace);
 
         if (!class_exists($entityNamespace)) {
-
             throw new ConfigurationInvalidException('Entity ' . $entityNamespace . ' not found');
         }
 
@@ -186,21 +182,20 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
     protected function registerLocator(
         ContainerBuilder $container,
         EntityMapping $entityMapping
-    )
-    {
+    ) {
         /**
          * Locator
          */
         $locatorId = 'simple_doctrine_mapping.locator.' . $entityMapping->getUniqueIdentifier();
         $locator = new Definition('Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator');
         $locator->setPublic(false);
-        $locator->setArguments(array(
+        $locator->setArguments([
             $entityMapping->getEntityNamespace(),
             [$entityMapping->getEntityMappingFilePath()],
-        ));
+        ]);
         $locator->setConfigurator([
             new Reference('simple_doctrine_mapping.locator_configurator'),
-            'configure'
+            'configure',
         ]);
         $container->setDefinition($locatorId, $locator);
 
@@ -218,20 +213,19 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
     protected function registerDriver(
         ContainerBuilder $container,
         EntityMapping $entityMapping
-    )
-    {
+    ) {
         /**
          * Specific extension Driver definition
          */
         $mappingDriverId = 'doctrine.orm.' . $entityMapping->getUniqueIdentifier() . '_metadata_driver';
         $mappingDriverDefinition = new Definition($this->getDriverNamespaceGivenEntityMapping($entityMapping));
         $mappingDriverDefinition->setPublic(false);
-        $mappingDriverDefinition->setArguments(array(
+        $mappingDriverDefinition->setArguments([
             new Reference('simple_doctrine_mapping.locator.' . $entityMapping->getUniqueIdentifier()),
-        ));
-        $mappingDriverDefinition->addMethodCall('setGlobalBasename', array(
+        ]);
+        $mappingDriverDefinition->addMethodCall('setGlobalBasename', [
             $entityMapping->getEntityNamespace(),
-        ));
+        ]);
         $container->setDefinition($mappingDriverId, $mappingDriverDefinition);
 
         return $this;
@@ -250,8 +244,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
     protected function addDriverInDriverChain(
         ContainerBuilder $container,
         EntityMapping $entityMapping
-    )
-    {
+    ) {
         $chainDriverDefinition = $container
             ->getDefinition(
                 'doctrine.orm.' . $entityMapping->getEntityManagerName() . '_metadata_driver'
@@ -262,12 +255,12 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
             'Mmoreram\SimpleDoctrineMapping\Mapping\MappingDriverChain'
         );
 
-        $chainDriverDefinition->addMethodCall('addDriver', array(
+        $chainDriverDefinition->addMethodCall('addDriver', [
             new Reference(
                 'doctrine.orm.' . $entityMapping->getUniqueIdentifier() . '_metadata_driver'
             ),
             $entityMapping->getEntityNamespace(),
-        ));
+        ]);
 
         return $this;
     }
@@ -306,7 +299,6 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
     protected function resolveEntityManagerName(ContainerBuilder $container, $entityManagerName)
     {
         if (!$container->has('doctrine.orm.' . $entityManagerName . '_metadata_driver')) {
-
             throw new EntityManagerNotFoundException($entityManagerName);
         }
 

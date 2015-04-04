@@ -33,7 +33,7 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
      *
      * @var array
      */
-    protected static $pathsMap = array();
+    protected static $pathsMap = [];
 
     /**
      * Set paths
@@ -84,7 +84,6 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
     public function findMappingFile($className)
     {
         if (!$this->fileExists($className)) {
-
             throw MappingException::mappingFileNotFound($className, $this->paths[0]);
         }
 
