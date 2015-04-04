@@ -57,12 +57,10 @@ class LocatorConfigurator
         $resourcePathRoot = array_shift($resourcePathExploded);
 
         if (strpos($resourcePathRoot, '@') === 0) {
-
             $mappingFileBundle = ltrim($resourcePathRoot, '@');
             $bundle = $this->kernel->getBundle($mappingFileBundle);
 
             if ($bundle instanceof BundleInterface) {
-
                 $resourcePathRoot = $bundle->getPath();
             }
         }
@@ -72,7 +70,6 @@ class LocatorConfigurator
         $path = implode('/', $resourcePathExploded);
 
         if (!file_exists($path)) {
-
             throw new ConfigurationInvalidException('Mapping file "' . $path . '" does not exist');
         }
 

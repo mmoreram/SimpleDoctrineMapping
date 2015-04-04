@@ -32,16 +32,16 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
 
             /**
              * Doctrine bundles
              */
             new FrameworkBundle(),
             new DoctrineBundle(),
-            new TestBundle()
+            new TestBundle(),
 
-        );
+        ];
 
         return $bundles;
     }
@@ -70,7 +70,6 @@ class AppKernel extends Kernel
         'SimpleDoctrineMapping' .
         DIRECTORY_SEPARATOR .
         $this->getContainerClass() . '/Cache/';
-
     }
 
     /**

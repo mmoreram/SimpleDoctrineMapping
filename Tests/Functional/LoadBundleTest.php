@@ -78,11 +78,10 @@ class LoadBundleTest extends WebTestCase
      *
      * @return KernelInterface A KernelInterface instance
      */
-    protected static function createKernel(array $options = array())
+    protected static function createKernel(array $options = [])
     {
         $kernelClass = self::getKernelClass();
 
         return new $kernelClass('test', true);
     }
-
 }

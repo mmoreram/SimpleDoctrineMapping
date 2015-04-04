@@ -34,7 +34,7 @@ class MappingDriverChain extends BaseMappingDriverChain
     /**
      * @var array
      */
-    private $drivers = array();
+    private $drivers = [];
 
     /**
      * Gets the default driver.
@@ -101,7 +101,6 @@ class MappingDriverChain extends BaseMappingDriverChain
          * @var $driver FileDriver
          */
         foreach ($this->drivers as $driver) {
-
             $namespace = $driver->getGlobalBasename();
 
             if ($this->classNameIsAllowed($className, $namespace)) {
@@ -130,14 +129,13 @@ class MappingDriverChain extends BaseMappingDriverChain
      */
     public function getAllClassNames()
     {
-        $classNames = array();
-        $driverClasses = array();
+        $classNames = [];
+        $driverClasses = [];
 
         /**
          * @var $driver FileDriver
          */
         foreach ($this->drivers as $driver) {
-
             $namespace = $driver->getGlobalBasename();
             $oid = spl_object_hash($driver);
 
