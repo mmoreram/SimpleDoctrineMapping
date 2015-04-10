@@ -2,9 +2,9 @@
     "name": "mmoreram/simple-doctrine-mapping",
     "description": "Simple Doctrine Mapping ",
     "keywords": [
-      "doctrine",
-      "mapping",
-      "mmoreram"
+        "doctrine",
+        "mapping",
+        "mmoreram"
     ],
     "homepage": "https://github.com/mmoreram/SimpleDoctrineMapping",
     "type": "library",
