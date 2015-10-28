@@ -16,8 +16,8 @@ Repeat with me, *Keep it simple*
 CompilerPass
 ------------
 
-A CompilerPass, to those of you who still do not know what they are, try to see
-them as your last chance to configure your container. At this point you can
+For those of you who still do not know what is a CompilerPass, try to visualize
+it as your last chance to configure your container. At this point you can
 retrieve all your parameter configuration, but you cannot build any service, this
 is the point where you can dynamically build and complete services.
 
