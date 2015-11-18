@@ -1,6 +1,9 @@
 Simple Doctrine Mapping for Symfony2
 =====
 
+[![Build Status](https://img.shields.io/travis/mmoreram/SimpleDoctrineMapping.svg?style=flat-square)](https://travis-ci.org/mmoreram/SimpleDoctrineMapping)
+
+
 *KISS*, Remember?
 
 This bundle streamlines and reduces the complexity of the Doctrine mapping process. the
