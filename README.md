@@ -1,23 +1,25 @@
-Simple Doctrine Mapping for Symfony2
-=====
+# Simple Doctrine Mapping for Symfony2
 
 [![Build Status](https://img.shields.io/travis/mmoreram/SimpleDoctrineMapping.svg?style=flat-square)](https://travis-ci.org/mmoreram/SimpleDoctrineMapping)
 
-
 *KISS*, Remember?
 
-This bundle streamlines and reduces the complexity of the Doctrine mapping process. the
-first premise to use this bundle is disable, if enabled, the
-`auto_mapping` config definition of your managers. Once active, hands-on
-work, we will define specifically how your entities map to your ORM.
+This project provides you an amazing way of adding your entities mapping data
+in any Symfony project, without the need of taking part of the `auto_mapping`
+doctrine process.
 
-SimpleDoctrineMapping offers you just an abstract compiler pass with one method,
-enough to make your project work.
+With a simple compiler pass in your bundle, make sure your entities are mapped
+properly into database, and provider your bundle users a unique way of
+overwriting and customization of these entities.
 
-Repeat with me, *Keep it simple*
+To work with a higher abstraction level of this bundle, use the mapping part of
+[http://github.com/mmoreram/BaseBundle](https://github.com/mmoreram/BaseBundle#entity-mapping).
+This bundle makes the best possible integration of SimpleDoctrineMapping in your
+bundles.
 
-CompilerPass
-------------
+Repeat with me, *Keep it simple*.
+
+## CompilerPass
 
 For those of you who still do not know what is a CompilerPass, try to visualize
 it as your last chance to configure your container. At this point you can
@@ -108,8 +110,7 @@ And that's it. After the container compilation it will add our mapping
 information. No magic.
 
 
-addEntityMapping()
-------------------
+## addEntityMapping()
 
 The method *addEntityMapping()* does not offer us many options, but the necessary
 to be able to define the entity map in most cases.
@@ -171,8 +172,7 @@ to be able to define the entity map in most cases.
 
 Of course, all values are required but the last one.
 
-Parameters
-----------
+## Parameters
 
 So, imagine that you are working in a public Bundle, I mean, your bundle will be
 installed by other projects in their vendor folder, but you want to expose your
@@ -241,30 +241,3 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
     }
 }
 ```
-
-Tags
-----
-
-* Use last unstable version ( alias of `dev-master` ) to stay always in last commit
-* Use last stable version tag to stay in a stable release.
-
-Contributing
-------------
-
-This projects follows Symfony2 coding standards, so pull requests must pass PHPCS
-checks. Read more details about
-[Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
-and install the corresponding [CodeSniffer definition](https://github.com/opensky/Symfony2-coding-standard)
-to run code validation.
-
-There is also a policy for contributing to this project. Pull requests must
-be explained step by step to make the review process easy in order to
-accept and merge them. New features must come paired with PHPUnit tests.
-
-If you would like to contribute, please read the [Contributing Code][1] in the project
-documentation. If you are submitting a pull request, please follow the guidelines
-in the [Submitting a Patch][2] section and use the [Pull Request Template][3].
-
-[1]: http://symfony.com/doc/current/contributing/code/index.html
-[2]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
-[3]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request

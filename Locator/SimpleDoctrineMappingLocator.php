@@ -11,44 +11,31 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\Locator;
 
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\ORM\Mapping\MappingException;
 
 /**
- * Class SimpleDoctrineMappingLocator
+ * Class SimpleDoctrineMappingLocator.
  */
-class SimpleDoctrineMappingLocator extends DefaultFileLocator
+final class SimpleDoctrineMappingLocator extends DefaultFileLocator
 {
     /**
-     * Entity namespace
+     * Entity namespace.
      *
      * @var string
      */
-    protected $namespace;
+    private $namespace;
 
     /**
-     * Array with mapping file path
+     * Array with mapping file path.
      *
      * @var array
      */
-    protected static $pathsMap = [];
-
-    /**
-     * Set paths
-     *
-     * @param array $paths Paths
-     *
-     * @return SimpleDoctrineMappingLocator self Object
-     */
-    public function setPaths($paths)
-    {
-        $this->paths = $paths;
-        self::$pathsMap[$this->namespace] = $this->paths;
-
-        return $this;
-    }
+    private static $pathsMap = [];
 
     /**
      * Constructor.
@@ -63,15 +50,26 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
     }
 
     /**
-     * {@inheritDoc}
+     * Set paths.
+     *
+     * @param array $paths
      */
-    public function fileExists($className)
+    public function setPaths($paths)
     {
-        return (isset($this->paths[0]) && is_file($this->paths[0]));
+        $this->paths = $paths;
+        self::$pathsMap[$this->namespace] = $this->paths;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     */
+    public function fileExists($className)
+    {
+        return isset($this->paths[0]) && is_file($this->paths[0]);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getAllClassNames($globalBasename = null)
     {
@@ -79,7 +77,7 @@ class SimpleDoctrineMappingLocator extends DefaultFileLocator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findMappingFile($className)
     {

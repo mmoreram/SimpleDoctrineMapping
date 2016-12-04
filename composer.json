@@ -26,30 +26,32 @@
         }
     ],
     "require": {
-        "php": "^5.4|^7.0",
-        "doctrine/common": "~2.4",
-        "doctrine/orm": "~2.4",
-        "symfony/http-kernel": "^2.4|^3.0",
-        "symfony/dependency-injection": "^2.4|^3.0"
+        "php": "^7.1",
+        "doctrine/common": "^2.6",
+        "doctrine/orm": "^2.5",
+        "symfony/http-kernel": "^3.2",
+        "symfony/dependency-injection": "^3.2"
     },
     "require-dev": {
-        "symfony/framework-bundle": "^2.4.8|^3.0",
-        "doctrine/doctrine-bundle": "~1.2",
-        "fabpot/php-cs-fixer": "1.4.2",
-        "mmoreram/php-formatter": "1.0.4",
-        "phpunit/phpunit": "4.5.0"
+        "symfony/framework-bundle": "^3.2",
+        "doctrine/doctrine-bundle": "^1.6.4",
+        "mmoreram/base-bundle": "dev-master",
+        "friendsofphp/php-cs-fixer": "1.12.4",
+        "mmoreram/php-formatter": "^1.2.0",
+        "phpunit/phpunit": "^5.6.4"
     },
     "autoload": {
         "psr-4": {
             "Mmoreram\\SimpleDoctrineMapping\\": ""
         }
     },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.2-dev"
-        }
+    "scripts": {
+        "fix-code": [
+            "vendor/bin/php-cs-fixer fix --config-file=.php_cs",
+            "vendor/bin/php-formatter f:h:f .",
+            "vendor/bin/php-formatter f:s:f .",
+            "vendor/bin/php-formatter f:u:s ."
+        ],
+        "test": "vendor/bin/phpunit"
     }
 }

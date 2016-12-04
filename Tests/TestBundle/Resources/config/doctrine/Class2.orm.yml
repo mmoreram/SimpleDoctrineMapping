@@ -1,0 +1,11 @@
+Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\Entity\Class2:
+    type: entity
+    table: class2
+    id:
+        id:
+            type: integer
+    fields:
+        name:
+            column: name
+            type: string
+            length: 255
