@@ -11,57 +11,61 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\DataObject;
 
 /**
- * Class EntityMapping
+ * Class EntityMapping.
  */
-class EntityMapping
+final class EntityMapping
 {
     /**
      * @var string
      *
      * entityNamespace
      */
-    protected $entityNamespace;
+    private $entityNamespace;
 
     /**
      * @var string
      *
      * entityMappingFilePath
      */
-    protected $entityMappingFilePath;
+    private $entityMappingFilePath;
 
     /**
      * @var string
      *
      * entityManagerName
      */
-    protected $entityManagerName;
+    private $entityManagerName;
 
     /**
      * @var string
      *
      * UniqueIdentifier
      */
-    protected $uniqueIdentifier;
+    private $uniqueIdentifier;
 
     /**
      * @var string
      *
      * Extension
      */
-    protected $extension;
+    private $extension;
 
     /**
-     * @param string $entityNamespace       Entity namespace
-     * @param string $entityMappingFilePath Entity mapping file path
-     * @param string $entityManagerName     Entity manager name
+     * Constructor.
+     *
+     * @param string $entityNamespace
+     * @param string $entityMappingFilePath
+     * @param string $entityManagerName
      */
     public function __construct(
-        $entityNamespace,
-        $entityMappingFilePath,
-        $entityManagerName
+        string $entityNamespace,
+        string $entityMappingFilePath,
+        string $entityManagerName
     ) {
         $this->entityNamespace = $entityNamespace;
         $this->entityMappingFilePath = $entityMappingFilePath;
@@ -71,51 +75,51 @@ class EntityMapping
     }
 
     /**
-     * Get EntityManagerName
+     * Get EntityManagerName.
      *
-     * @return mixed EntityManagerName
+     * @return string
      */
-    public function getEntityManagerName()
+    public function getEntityManagerName() : string
     {
         return $this->entityManagerName;
     }
 
     /**
-     * Get EntityMappingFilePath
+     * Get EntityMappingFilePath.
      *
-     * @return mixed EntityMappingFilePath
+     * @return string
      */
-    public function getEntityMappingFilePath()
+    public function getEntityMappingFilePath() : string
     {
         return $this->entityMappingFilePath;
     }
 
     /**
-     * Get EntityNamespace
+     * Get EntityNamespace.
      *
-     * @return mixed EntityNamespace
+     * @return string
      */
-    public function getEntityNamespace()
+    public function getEntityNamespace() : string
     {
         return $this->entityNamespace;
     }
 
     /**
-     * Get UniqueIdentifier
+     * Get UniqueIdentifier.
      *
-     * @return string UniqueIdentifier
+     * @return string
      */
-    public function getUniqueIdentifier()
+    public function getUniqueIdentifier() : string
     {
         return $this->uniqueIdentifier;
     }
 
     /**
-     * Get Extension
+     * Get Extension.
      *
-     * @return string Extension
+     * @return string
      */
-    public function getExtension()
+    public function getExtension() : string
     {
         return $this->extension;
     }

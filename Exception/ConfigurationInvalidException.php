@@ -11,13 +11,15 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\Exception;
 
 use Exception;
 
 /**
- * Class ConfigurationInvalidException
+ * Class ConfigurationInvalidException.
  */
-class ConfigurationInvalidException extends Exception
+final class ConfigurationInvalidException extends Exception
 {
 }

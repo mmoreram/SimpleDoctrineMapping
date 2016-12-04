@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\CompilerPass\Abstracts;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -24,12 +26,12 @@ use Mmoreram\SimpleDoctrineMapping\Exception\EntityManagerNotFoundException;
 use Mmoreram\SimpleDoctrineMapping\Exception\MappingExtensionWithoutDriverException;
 
 /**
- * Class MappingCompilerPass
+ * Class MappingCompilerPass.
  */
 abstract class AbstractMappingCompilerPass implements CompilerPassInterface
 {
     /**
-     * Add mapping entity
+     * Add mapping entity.
      *
      * This method adds a new Driver into global MappingDriverChain with single
      * entity mapping information.
@@ -66,9 +68,9 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
      * @param string           $entityManagerName     EntityManager name
      * @param string           $entityNamespace       Entity namespace
      * @param string           $entityMappingFilePath Entity Mapping file path
-     * @param boolean|string   $enable                Entity mapping must be included
+     * @param bool|string      $enable                Entity mapping must be included
      *
-     * @return $this self Object
+     * @return AbstractMappingCompilerPass
      *
      * @throws EntityManagerNotFoundException Entity Manager nod found
      */
@@ -78,7 +80,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         $entityNamespace,
         $entityMappingFilePath,
         $enable = true
-    ) {
+    ) : self {
         $entityMapping = $this->resolveEntityMapping(
             $container,
             $entityManagerName,
@@ -88,45 +90,46 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         );
 
         if ($entityMapping instanceof EntityMapping) {
-            $this
-                ->registerLocatorConfigurator($container)
-                ->registerLocator($container, $entityMapping)
-                ->registerDriver($container, $entityMapping)
-                ->addDriverInDriverChain($container, $entityMapping);
+            $this->registerLocatorConfigurator($container);
+            $this->registerLocator($container, $entityMapping);
+            $this->registerDriver($container, $entityMapping);
+            $this->addDriverInDriverChain($container, $entityMapping);
+            $this->addAliases($container, $entityMapping);
         }
 
         return $this;
     }
 
     /**
-     * Resolve EntityMapping inputs and build a consistent EntityMapping object
+     * Resolve EntityMapping inputs and build a consistent EntityMapping object.
      *
-     * @param ContainerBuilder $container             Container
-     * @param string           $entityManagerName     EntityManager name
-     * @param string           $entityNamespace       Entity namespace
-     * @param string           $entityMappingFilePath Entity Mapping file path
-     * @param boolean|string   $enable                Entity mapping must be included
+     * This method returns null if the current entity has not been added
      *
-     * @return EntityMapping|null New EntityMapping object or null if current
-     *                            entity has not to be included
+     * @param ContainerBuilder $container
+     * @param string           $entityManagerName
+     * @param string           $entityNamespace
+     * @param string           $entityMappingFilePath
+     * @param string|bool      $enable
+     *
+     * @return EntityMapping|null
      *
      * @throws ConfigurationInvalidException  Configuration invalid
      * @throws EntityManagerNotFoundException Entity Manager not found
      */
-    protected function resolveEntityMapping(
+    private function resolveEntityMapping(
         ContainerBuilder $container,
-        $entityManagerName,
-        $entityNamespace,
-        $entityMappingFilePath,
+        string $entityManagerName,
+        string $entityNamespace,
+        string $entityMappingFilePath,
         $enable = true
-    ) {
+    ) : ? EntityMapping {
         $enableEntityMapping = $this->resolveParameterName(
             $container,
             $enable
         );
 
         if (false === $enableEntityMapping) {
-            return;
+            return null;
         }
 
         $entityNamespace = $this->resolveParameterName($container, $entityNamespace);
@@ -147,17 +150,15 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * Register locator configurator
+     * Register locator configurator.
      *
-     * @param ContainerBuilder $container Container
-     *
-     * @return AbstractMappingCompilerPass self Object
+     * @param ContainerBuilder $container
      */
-    protected function registerLocatorConfigurator(ContainerBuilder $container)
+    private function registerLocatorConfigurator(ContainerBuilder $container)
     {
         $locatorConfiguratorId = 'simple_doctrine_mapping.locator_configurator';
         if ($container->hasDefinition($locatorConfiguratorId)) {
-            return $this;
+            return;
         }
 
         $locatorConfigurator = new Definition('Mmoreram\SimpleDoctrineMapping\Configurator\LocatorConfigurator');
@@ -167,24 +168,20 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
         ]);
 
         $container->setDefinition($locatorConfiguratorId, $locatorConfigurator);
-
-        return $this;
     }
 
     /**
-     * Register the locator
+     * Register the locator.
      *
-     * @param ContainerBuilder $container     Container
-     * @param EntityMapping    $entityMapping Entity mapping
-     *
-     * @return AbstractMappingCompilerPass self Object
+     * @param ContainerBuilder $container
+     * @param EntityMapping    $entityMapping
      */
-    protected function registerLocator(
+    private function registerLocator(
         ContainerBuilder $container,
         EntityMapping $entityMapping
     ) {
         /**
-         * Locator
+         * Locator.
          */
         $locatorId = 'simple_doctrine_mapping.locator.' . $entityMapping->getUniqueIdentifier();
         $locator = new Definition('Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator');
@@ -198,24 +195,20 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
             'configure',
         ]);
         $container->setDefinition($locatorId, $locator);
-
-        return $this;
     }
 
     /**
-     * Register the driver
+     * Register the driver.
      *
-     * @param ContainerBuilder $container     Container
-     * @param EntityMapping    $entityMapping Entity mapping
-     *
-     * @return AbstractMappingCompilerPass self Object
+     * @param ContainerBuilder $container
+     * @param EntityMapping    $entityMapping
      */
-    protected function registerDriver(
+    private function registerDriver(
         ContainerBuilder $container,
         EntityMapping $entityMapping
     ) {
         /**
-         * Specific extension Driver definition
+         * Specific extension Driver definition.
          */
         $mappingDriverId = 'doctrine.orm.' . $entityMapping->getUniqueIdentifier() . '_metadata_driver';
         $mappingDriverDefinition = new Definition($this->getDriverNamespaceGivenEntityMapping($entityMapping));
@@ -227,21 +220,17 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
             $entityMapping->getEntityNamespace(),
         ]);
         $container->setDefinition($mappingDriverId, $mappingDriverDefinition);
-
-        return $this;
     }
 
     /**
-     * Register and override the DriverChain definition
+     * Register and override the DriverChain definition.
      *
-     * @param ContainerBuilder $container     Container
-     * @param EntityMapping    $entityMapping Entity mapping
-     *
-     * @return AbstractMappingCompilerPass self Object
+     * @param ContainerBuilder $container
+     * @param EntityMapping    $entityMapping
      *
      * @throws EntityManagerNotFoundException Entity Manager nod found
      */
-    protected function addDriverInDriverChain(
+    private function addDriverInDriverChain(
         ContainerBuilder $container,
         EntityMapping $entityMapping
     ) {
@@ -252,7 +241,7 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
 
         $container->setParameter(
             'doctrine.orm.metadata.driver_chain.class',
-            'Mmoreram\SimpleDoctrineMapping\Mapping\MappingDriverChain'
+            'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain'
         );
 
         $chainDriverDefinition->addMethodCall('addDriver', [
@@ -261,25 +250,63 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
             ),
             $entityMapping->getEntityNamespace(),
         ]);
-
-        return $this;
     }
 
     /**
-     * Resolvers
+     * Add aliases for short Doctrine accessing mode.
+     *
+     * This method will make a vitual association between the bundle proposing
+     * the entity and the entity namespace, even if both elements are in
+     * different packages (Bundle + Component).
+     *
+     * Only useful and working when the relation between a bundle and the entity
+     * folder path [[ Bundle (*) => (1) Entity path ]]
+     *
+     * @param ContainerBuilder $container
+     * @param EntityMapping    $entityMapping
+     */
+    private function addAliases(
+        ContainerBuilder $container,
+        EntityMapping $entityMapping
+    ) {
+        $entityMappingFilePath = $entityMapping->getEntityMappingFilePath();
+        if (strpos($entityMappingFilePath, '@') === 0) {
+            $bundleName = trim(explode('/', $entityMappingFilePath, 2)[0]);
+            $className = explode('\\', $entityMapping->getEntityNamespace());
+            unset($className[count($className) - 1]);
+            $configurationServiceDefinition = $container
+                ->getDefinition(
+                    'doctrine.orm.' . $entityMapping->getEntityManagerName() . '_configuration'
+                );
+
+            $configurationServiceDefinition->addMethodCall('addEntityNamespace', [
+                $bundleName,
+                implode('\\', $className),
+            ]);
+        }
+    }
+
+    /**
+     * Resolvers.
      */
 
     /**
      * Return value of parameter name if exists
-     * Return itself otherwise
+     * Return itself otherwise.
      *
-     * @param ContainerBuilder $container     Container
-     * @param string           $parameterName Parameter name
+     * @param ContainerBuilder $container
+     * @param mixed            $parameterName
      *
-     * @return string Parameter value
+     * @return mixed
      */
-    protected function resolveParameterName(ContainerBuilder $container, $parameterName)
-    {
+    private function resolveParameterName(
+        ContainerBuilder $container,
+        $parameterName
+    ) {
+        if (!is_string($parameterName)) {
+            return $parameterName;
+        }
+
         return $container->hasParameter($parameterName)
             ? $container->getParameter($parameterName)
             : $parameterName;
@@ -287,34 +314,32 @@ abstract class AbstractMappingCompilerPass implements CompilerPassInterface
 
     /**
      * Throws an exception if given entityName is not available or does
-     * not exist
+     * not exist.
      *
-     * @param ContainerBuilder $container         Container
-     * @param string           $entityManagerName EntityManager name
-     *
-     * @return string Parameter value
+     * @param ContainerBuilder $container
+     * @param string           $entityManagerName
      *
      * @throws EntityManagerNotFoundException Entity manager not found
      */
-    protected function resolveEntityManagerName(ContainerBuilder $container, $entityManagerName)
-    {
+    private function resolveEntityManagerName(
+        ContainerBuilder $container,
+        string $entityManagerName
+    ) {
         if (!$container->has('doctrine.orm.' . $entityManagerName . '_metadata_driver')) {
             throw new EntityManagerNotFoundException($entityManagerName);
         }
-
-        return $this;
     }
 
     /**
-     * Return the namespace of the driver to use given an EntityMapping
+     * Return the namespace of the driver to use given an EntityMapping.
      *
-     * @param EntityMapping $entityMapping Entity Mapping
+     * @param EntityMapping $entityMapping
      *
-     * @return string Driver namespace
+     * @return string
      *
      * @throws MappingExtensionWithoutDriverException Driver not found
      */
-    public function getDriverNamespaceGivenEntityMapping(EntityMapping $entityMapping)
+    private function getDriverNamespaceGivenEntityMapping(EntityMapping $entityMapping) : string
     {
         $namespace = 'Doctrine\ORM\Mapping\Driver\\';
 

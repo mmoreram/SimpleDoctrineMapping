@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\Configurator;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -20,19 +22,19 @@ use Mmoreram\SimpleDoctrineMapping\Exception\ConfigurationInvalidException;
 use Mmoreram\SimpleDoctrineMapping\Locator\SimpleDoctrineMappingLocator;
 
 /**
- * Class LocatorConfigurator
+ * Class LocatorConfigurator.
  */
-class LocatorConfigurator
+final class LocatorConfigurator
 {
     /**
      * @var KernelInterface
      *
      * Kernel
      */
-    protected $kernel;
+    private $kernel;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param KernelInterface $kernel Kernel
      */

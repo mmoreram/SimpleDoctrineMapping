@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\CompilerPass;
+declare(strict_types=1);
+
+namespace Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\CompilerPass;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Mmoreram\SimpleDoctrineMapping\CompilerPass\Abstracts\AbstractMappingCompilerPass;
 
 /**
- * Class MappingCompilerPass
+ * Class MappingCompilerPass.
  */
 class MappingCompilerPass extends AbstractMappingCompilerPass
 {
@@ -35,13 +37,13 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
             ->addEntityMapping(
                 $container,
                 'default',
-                'Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\Class1',
+                'Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\Entity\Class1',
                 '@TestBundle/Mapping/Class1.orm.yml'
             )
             ->addEntityMapping(
                 $container,
                 'alternative',
-                'Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\Class2',
+                'Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\Entity\Class2',
                 '@TestBundle/Mapping/Class2.custom.orm.yml',
                 true
             )
@@ -61,7 +63,7 @@ class MappingCompilerPass extends AbstractMappingCompilerPass
             ->addEntityMapping(
                 $container,
                 'notexistingone',
-                'Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\NonExisting',
+                'Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\Entity\NonExisting',
                 '@TestBundle/Mapping/NonExisting.orm.yml',
                 false
             );

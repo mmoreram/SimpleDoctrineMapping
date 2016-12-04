@@ -11,15 +11,17 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\MyOtherEntityNamespace;
+declare(strict_types=1);
+
+namespace Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\MyOtherEntityNamespace;
 
 /**
- * Class Class3
+ * Class Class3.
  */
 class Class3
 {
     /**
-     * @var integer
+     * @var int
      *
      * Entity id
      */
@@ -31,4 +33,18 @@ class Class3
      * Phone
      */
     protected $phone;
+
+    /**
+     * Class3 constructor.
+     *
+     * @param int    $id
+     * @param string $phone
+     */
+    public function __construct(
+        int $id,
+        string $phone
+    ) {
+        $this->id = $id;
+        $this->phone = $phone;
+    }
 }

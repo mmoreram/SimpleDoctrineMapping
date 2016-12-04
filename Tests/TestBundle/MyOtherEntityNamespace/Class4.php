@@ -11,15 +11,17 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\MyOtherEntityNamespace;
+declare(strict_types=1);
+
+namespace Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\MyOtherEntityNamespace;
 
 /**
- * Class Class4
+ * Class Class4.
  */
 class Class4
 {
     /**
-     * @var integer
+     * @var int
      *
      * Entity id
      */
@@ -31,4 +33,18 @@ class Class4
      * Lastname
      */
     protected $lastname;
+
+    /**
+     * Class4 constructor.
+     *
+     * @param int    $id
+     * @param string $lastname
+     */
+    public function __construct(
+        int $id,
+        string $lastname
+    ) {
+        $this->id = $id;
+        $this->lastname = $lastname;
+    }
 }

@@ -11,19 +11,21 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\Exception;
 
 use Exception;
 
 /**
- * Class EntityManagerNotFoundException
+ * Class EntityManagerNotFoundException.
  */
-class EntityManagerNotFoundException extends Exception
+final class EntityManagerNotFoundException extends Exception
 {
     /**
-     * Exception constructor
+     * Exception constructor.
      *
-     * @param string $entityManagerName EntityManager name
+     * @param string $entityManagerName
      */
     public function __construct($entityManagerName)
     {

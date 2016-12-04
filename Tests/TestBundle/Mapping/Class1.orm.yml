@@ -1,11 +1,9 @@
-Mmoreram\SimpleDoctrineMapping\Tests\Functional\TestBundle\Entity\Class1:
+Mmoreram\SimpleDoctrineMapping\Tests\TestBundle\Entity\Class1:
     type: entity
     table: class1
     id:
         id:
             type: integer
-            generator:
-                strategy: AUTO
     fields:
         code:
             column: code

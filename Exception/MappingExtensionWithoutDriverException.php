@@ -11,19 +11,21 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SimpleDoctrineMapping\Exception;
 
 use Exception;
 
 /**
- * Class MappingExtensionWithoutDriverException
+ * Class MappingExtensionWithoutDriverException.
  */
-class MappingExtensionWithoutDriverException extends Exception
+final class MappingExtensionWithoutDriverException extends Exception
 {
     /**
-     * Exception constructor
+     * Exception constructor.
      *
-     * @param string $extension Extension
+     * @param string $extension
      */
     public function __construct($extension)
     {
